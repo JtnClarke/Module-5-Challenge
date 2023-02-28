@@ -1,17 +1,42 @@
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
-var toDoText = document.querySelector('.description')
-var toDoList = localStorage.getItem('toDoList')
 
 //working on the save button so that it will save user edits to local storage
 $(document).ready(function () {
-  $('.saveBtn').click(function() {
-   localStorage.setItem('toDoList', toDoList)
-   toDoText.textContent = toDoList
-  })
   
 });
+
+function saveBtnFunction(event){
+  console.log(event)
+  var value 
+  var time 
+  if (event.target.nodeName === 'I') {
+    value = (event.target.parentNode.previousElementSibling.value)
+    time = (event.target.parentNode.previousElementSibling.previousElementSibling.innerText)
+  } else {
+    value = (event.target.previousElementSibling.value)
+    time = (event.target.previousElementSibling.previousElementSibling.innerHTML)
+  }
+  console.log(time, value)
+
+
+window.localStorage.setItem(time, value)
+
+
+}
+
+document.querySelectorAll('.saveBtn').forEach(element => {
+  element.addEventListener('click', saveBtnFunction)
+});
+
+document.querySelectorAll('.time-block').forEach(element => {
+  console.log(element.children[0].innerHTML)
+  var time = element.children[0].innerHTML
+  var task = localStorage.getItem(time)
+  element.children[1].value = task
+})
+
 //function and varibles to create a live clock
 function liveTime(){
   var dateTime = new Date();
@@ -19,14 +44,14 @@ function liveTime(){
   var mins = dateTime.getMinutes();
   var sec = dateTime.getSeconds();
 
-  document.getElementById('hours').innerHTML = hrs
-  document.getElementById('minutes').innerHTML = mins
-  document.getElementById('seconds').innerHTML = sec
+  document.getElementById('hours').innerHTML = hrs;
+  document.getElementById('minutes').innerHTML = mins;
+  document.getElementById('seconds').innerHTML = sec;
 }
 
-
-
 setInterval(liveTime, 10)
+
+
 
 // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
